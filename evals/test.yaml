@@ -1,0 +1,16 @@
+name: basic_test
+model: gemma-3-27b-it
+scorer: exact_match
+
+cases:
+  - id: tc_001
+    prompt: "What is 2+2? Answer with just the number."
+    expected: "4"
+  
+  - id: tc_002
+    prompt: "What color is the sky on a clear day? Answer with just one word."
+    expected: "blue"
+
+  - id: tc_003
+    prompt: "Summarize this in 5 words: The quick brown fox jumps over the lazy dog."
+    expected: "fox jumps over lazy dog"

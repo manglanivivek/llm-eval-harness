@@ -1,0 +1,15 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "llm-eval-harness"
+version = "0.1.0"
+description = "LLM eval harness for regression testing prompt outputs"
+requires-python = ">=3.9"
+dependencies = [
+    "typer[all]>=0.9.0",
+]
+
+[project.scripts]
+harness = "harness.cli:app"
