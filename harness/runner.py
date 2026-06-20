@@ -5,6 +5,8 @@ from google import genai
 from rich.table import Table
 from rich.console import Console
 
+from harness.scorers import score_exact, score_semantic
+
 console = Console()
 
 def load_suite(path: Path):
@@ -20,10 +22,6 @@ def run_case(client, model_name: str, prompt: str):
     )
     return response.text.strip()
 
-def score_exact(actual: str, expected: str):
-    """Simple exact match scorer."""
-    return 1.0 if actual.lower() == expected.lower() else 0.0
-
 def run_suite(suite_path: Path, verbose: bool = False):
     """Main runner logic."""
     suite = load_suite(suite_path)
@@ -37,13 +35,16 @@ def run_suite(suite_path: Path, verbose: bool = False):
     client = genai.Client(api_key=api_key)
     
     results = []
-    console.print(f"[blue][bold]Made by Vivek Manglani[/bold][/blue]")
     for case in suite['cases']:
         if verbose:
             console.print(f"[dim]Running {case['id']}...[/dim]")
-        
+        scorer_name = suite.get('scorer', 'semantic')
+        if scorer_name == 'semantic':
+            scorer = score_semantic
+        else:
+            scorer = score_exact
         actual = run_case(client, suite['model'], case['prompt'])
-        score = score_exact(actual, case['expected'])
+        score = scorer(actual, case['expected'])
         
         results.append({
             'id': case['id'],
@@ -51,7 +52,7 @@ def run_suite(suite_path: Path, verbose: bool = False):
             'expected': case['expected'],
             'actual': actual,
             'score': score,
-            'passed': score >= 0.9
+            'passed': score >= 0.7
         })
     
     # Print results table
@@ -66,8 +67,8 @@ def run_suite(suite_path: Path, verbose: bool = False):
         status = "[green]✓ PASS[/green]" if r['passed'] else "[red]✗ FAIL[/red]"
         table.add_row(
             r['id'],
-            r['expected'][:30],
-            r['actual'][:30],
+            r['expected'][:30].strip(),     # ← add .strip()
+            r['actual'][:30].strip(),       # ← add .strip()
             f"{r['score']:.2f}",
             status
         )

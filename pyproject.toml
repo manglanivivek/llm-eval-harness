@@ -9,7 +9,16 @@ description = "LLM eval harness for regression testing prompt outputs"
 requires-python = ">=3.9"
 dependencies = [
     "typer[all]>=0.9.0",
+    "sentence-transformers>=2.7.0",
+    "pyyaml>=6.0.3",
+    "scikit-learn>=1.3.0",
+    "python-dotenv>=1.0.0",
+    "google-generativeai>=0.4.0",
+    "sqlmodel",
 ]
 
 [project.scripts]
 harness = "harness.cli:app"
+
+[tool.setuptools]
+packages = ["harness"]

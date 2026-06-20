@@ -21,14 +21,14 @@ def show(
     run_id: str = typer.Argument(..., help="Run ID to inspect"),
 ):
     """Show results for a completed eval run."""
-    print(f"Showing results for run: {run_id}")
+    console.print(f"Showing results for run: {run_id}")
 
 @app.command()
 def serve(
     port: int = typer.Option(8000, help="Port to bind"),
 ):
     """Start the results dashboard."""
-    print(f"Starting dashboard on port {port}")
+    console.print(f"Starting dashboard on port {port}")
 
 
 @app.command()
@@ -38,7 +38,7 @@ def compare(
     failed: bool = typer.Option(False, "--failed-only", "-f", help = "Only show failed evals")
 ):
     """Compares 2 runs by their evals"""
-    print(f"Comparing {run_id_1} and {run_id_2}")
-    print(f"Failed only: {failed}")
+    console.print(f"Comparing {run_id_1} and {run_id_2}")
+    console.print(f"Failed only: {failed}")
 if __name__ == "__main__":
     app()

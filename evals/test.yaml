@@ -1,6 +1,6 @@
 name: basic_test
 model: gemma-3-27b-it
-scorer: exact_match
+scorer: semantic
 
 cases:
   - id: tc_001
